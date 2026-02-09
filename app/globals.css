@@ -122,3 +122,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+::-moz-selection {
+  /* Code for Firefox */
+  background: #e535ab;
+  color: white;
+}
+
+::selection {
+  color: white;
+  background: #e535ab;
+}
