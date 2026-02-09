@@ -1,5 +1,13 @@
+import Header from "./Header";
+import Hero from "./Hero";
+
 const VHome = () => {
-  return <></>;
+  return (
+    <>
+      <Header />
+      <Hero />
+    </>
+  );
 };
 
 export default VHome;
