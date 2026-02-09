@@ -7,6 +7,24 @@ import { Editor } from "@monaco-editor/react";
 const PlayGround = () => {
   const [backendSchema, setBackendSchema] = useState("");
   const [frontendQuery, setFrontendQuery] = useState("");
+  const [backendTerminalMsg, setbackendTerminalMsg] = useState("");
+  const [frontendTerminalMsg, setfrontendTerminalMsg] = useState("");
+
+  const GenerateFrontendQuery = async () => {
+    const response = await fetch("/api/generate_query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ schema: backendSchema }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      setFrontendQuery(data.query);
+      setbackendTerminalMsg("Successfully Generated Your frontend Query!");
+    }
+  };
 
   return (
     <section id="next-section" className="p-20 relative overflow-hidden">
@@ -39,6 +57,7 @@ const PlayGround = () => {
                 </span>
               </div>
               <Button
+                onClick={GenerateFrontendQuery}
                 size="sm"
                 className="h-7 text-xs bg-[#e535ab] hover:bg-[#d12d9a] shadow-lg shadow-[#e535ab]/20"
               >
@@ -51,25 +70,7 @@ const PlayGround = () => {
             <div className="h-100 border-b border-neutral-800 relative">
               <Editor
                 defaultLanguage="graphql"
-                value={`type Query {
-  user(id: ID!): User
-  posts: [Post]
-}
-
-type User {
-  id: ID!
-  name: String!
-  email: String!
-  posts: [Post]
-}
-
-type Post {
-  id: ID!
-  title: String!
-  content: String!
-  author: User!
-}
-`}
+                value={backendSchema}
                 onChange={(value) => setBackendSchema(value || "")}
                 beforeMount={(monaco) => {
                   monaco.editor.defineTheme("dark", {
@@ -101,7 +102,7 @@ type Post {
               </div>
               <pre className="p-4 text-sm font-mono overflow-auto h-60 bg-gradient-to-b from-neutral-950 to-neutral-900">
                 <code className="text-green-400">
-                  {backendSchema || "// Click 'Run' to start the server"}
+                  {backendTerminalMsg || "// Start writing your queries."}
                 </code>
               </pre>
             </div>
@@ -131,20 +132,7 @@ type Post {
 
             {/* Frontend Code */}
             <pre className="p-6 text-sm font-mono overflow-auto h-100 border-b border-neutral-800">
-              <code className="text-neutral-100">
-                {`query GetUser {
-  user(id: "123") {
-    name
-    email
-    posts {
-      id
-      title
-      content
-      author
-    }
-  }
-}`}
-              </code>
+              <code className="text-neutral-100">{frontendQuery}</code>
             </pre>
 
             {/* Frontend Console */}
@@ -157,7 +145,8 @@ type Post {
               </div>
               <pre className="p-4 text-sm font-mono overflow-auto h-60 bg-gradient-to-b from-neutral-950 to-neutral-900">
                 <code className="text-blue-400">
-                  {"// Click 'Run' to execute the query"}
+                  {frontendTerminalMsg ||
+                    "// Click 'Get Backend Response' to recieve mock data for your query."}
                 </code>
               </pre>
             </div>
