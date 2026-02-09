@@ -9,11 +9,14 @@ const PlayGround = () => {
   const [frontendQuery, setFrontendQuery] = useState("");
 
   return (
-    <section id="next-section" className="p-20">
-      <div className="max-w-screen-2xl mx-auto">
+    <section id="next-section" className="p-20 relative overflow-hidden">
+      {/* Subtle background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-50/40 via-transparent to-pink-50/30 pointer-events-none"></div>
+
+      <div className="max-w-screen-2xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4">
-            Interactive <span className="text-[#e535ab] ">GraphQL</span>{" "}
+            Interactive <span className="text-[#e535ab]">GraphQL</span>{" "}
             Playground
           </h2>
           <p className="text-lg text-neutral-600">
@@ -21,11 +24,14 @@ const PlayGround = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 border rounded-lg overflow-hidden bg-neutral-950">
+        <div className="grid grid-cols-2 border rounded-xl overflow-hidden bg-neutral-950 shadow-2xl shadow-purple-500/10 hover:shadow-purple-500/20 transition-shadow duration-500">
           {/* Backend Section */}
-          <div className="border-r border-neutral-800">
+          <div className="border-r border-neutral-800 relative">
+            {/* Gradient overlay */}
+            <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#e535ab]/5 to-transparent pointer-events-none"></div>
+
             {/* Backend Header */}
-            <div className="flex items-center justify-between bg-neutral-900 px-4 py-3 border-b border-neutral-800">
+            <div className="flex items-center justify-between bg-neutral-900/95 backdrop-blur-sm px-4 py-3 border-b border-neutral-800 relative z-10">
               <div className="flex items-center gap-2">
                 <Code className="h-4 w-4 text-[#e535ab]" />
                 <span className="text-sm text-neutral-300 font-medium">
@@ -34,8 +40,7 @@ const PlayGround = () => {
               </div>
               <Button
                 size="sm"
-                className="h-7 text-xs bg-[#e535ab] hover:bg-[#d12d9a]"
-                // onClick={runBackend}
+                className="h-7 text-xs bg-[#e535ab] hover:bg-[#d12d9a] shadow-lg shadow-[#e535ab]/20"
               >
                 <Play className="h-3 w-3 mr-1" />
                 Generate Frontend Query
@@ -43,7 +48,7 @@ const PlayGround = () => {
             </div>
 
             {/* Backend Code */}
-            <pre className="text-sm font-mono overflow-auto h-100 border-b border-neutral-800">
+            <div className="h-100 border-b border-neutral-800 relative">
               <Editor
                 defaultLanguage="graphql"
                 value={`type Query {
@@ -76,7 +81,7 @@ type Post {
                     ],
                     colors: {
                       "editor.background": "#0a0a0a",
-                      "editor.lineHighlightBackground": "#2a2a2a",
+                      "editor.lineHighlightBackground": "#1a1a1a",
                       "editorCursor.foreground": "#e535ab",
                     },
                   });
@@ -84,17 +89,17 @@ type Post {
                 theme="dark"
                 options={{ minimap: { enabled: false }, fontSize: 14 }}
               />
-            </pre>
+            </div>
 
             {/* Backend Console */}
-            <div>
-              <div className="flex items-center gap-2 bg-neutral-900 px-4 py-2 border-b border-neutral-800">
+            <div className="relative">
+              <div className="flex items-center gap-2 bg-neutral-900/95 backdrop-blur-sm px-4 py-2 border-b border-neutral-800">
                 <Terminal className="h-4 w-4 text-green-500" />
                 <span className="text-xs text-neutral-400 font-mono">
                   Console
                 </span>
               </div>
-              <pre className="p-4 text-sm font-mono overflow-auto h-60">
+              <pre className="p-4 text-sm font-mono overflow-auto h-60 bg-gradient-to-b from-neutral-950 to-neutral-900">
                 <code className="text-green-400">
                   {backendSchema || "// Click 'Run' to start the server"}
                 </code>
@@ -103,9 +108,12 @@ type Post {
           </div>
 
           {/* Frontend Section */}
-          <div>
+          <div className="relative">
+            {/* Gradient overlay */}
+            <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none"></div>
+
             {/* Frontend Header */}
-            <div className="flex items-center justify-between bg-neutral-900 px-4 py-3 border-b border-neutral-800">
+            <div className="flex items-center justify-between bg-neutral-900/95 backdrop-blur-sm px-4 py-3 border-b border-neutral-800 relative z-10">
               <div className="flex items-center gap-2">
                 <Code className="h-4 w-4 text-blue-500" />
                 <span className="text-sm text-neutral-300 font-medium">
@@ -114,8 +122,7 @@ type Post {
               </div>
               <Button
                 size="sm"
-                className="h-7 text-xs bg-blue-500 hover:bg-blue-600"
-                // onClick={runFrontend}
+                className="h-7 text-xs bg-blue-500 hover:bg-blue-600 shadow-lg shadow-blue-500/20"
               >
                 <Play className="h-3 w-3 mr-1" />
                 Get Backend Response
@@ -133,6 +140,7 @@ type Post {
       id
       title
       content
+      author
     }
   }
 }`}
@@ -140,14 +148,14 @@ type Post {
             </pre>
 
             {/* Frontend Console */}
-            <div>
-              <div className="flex items-center gap-2 bg-neutral-900 px-4 py-2 border-b border-neutral-800">
+            <div className="relative">
+              <div className="flex items-center gap-2 bg-neutral-900/95 backdrop-blur-sm px-4 py-2 border-b border-neutral-800">
                 <Terminal className="h-4 w-4 text-blue-500" />
                 <span className="text-xs text-neutral-400 font-mono">
                   Response
                 </span>
               </div>
-              <pre className="p-4 text-sm font-mono overflow-auto h-60">
+              <pre className="p-4 text-sm font-mono overflow-auto h-60 bg-gradient-to-b from-neutral-950 to-neutral-900">
                 <code className="text-blue-400">
                   {"// Click 'Run' to execute the query"}
                 </code>
