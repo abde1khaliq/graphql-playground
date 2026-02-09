@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Play, Terminal, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Editor } from "@monaco-editor/react";
+import { parse } from "graphql";
 
 const PlayGround = () => {
   const [backendSchema, setBackendSchema] = useState("");
@@ -11,18 +12,28 @@ const PlayGround = () => {
   const [frontendTerminalMsg, setfrontendTerminalMsg] = useState("");
 
   const GenerateFrontendQuery = async () => {
-    const response = await fetch("/api/generate_query", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ schema: backendSchema }),
-    });
+    try {
+      parse(backendSchema);
+      console.log("Schema is valid");
+      const response = await fetch("/api/generate_query", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ schema: backendSchema }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      setFrontendQuery(data.query);
-      setbackendTerminalMsg("Successfully Generated Your frontend Query!");
+      if (response.ok) {
+        const data = await response.json();
+        setFrontendQuery(data.query);
+        setbackendTerminalMsg("Successfully Generated Your frontend Query!");
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        setbackendTerminalMsg(`${err}`);
+      } else {
+        console.error("Unknown error", err);
+      }
     }
   };
 
