@@ -7,9 +7,11 @@ const Footer = () => {
         <div className="grid grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="col-span-1">
-            <h3 className="font-bold text-lg mb-3">
-              <span className="text-[#e535ab]">GraphQL</span> Playground
-            </h3>
+            <img
+              src="https://i.postimg.cc/qRbwX8Tk/graphql-Playgroud-logo.png"
+              alt="GraphQL Playground"
+              className="h-10 mb-2"
+            />
             <p className="text-sm text-neutral-600 leading-relaxed">
               Interactive platform to explore and learn GraphQL with real-world
               examples.
